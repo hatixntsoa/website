@@ -106,7 +106,7 @@ body{
 }
 
 .btn:hover,
-.btn:focus {
+.btn:focus-visible {
   color: var(--accent);
   text-decoration: underline;
   box-shadow: none;
@@ -181,4 +181,9 @@ body{
     align-items: center;
     margin-bottom: 0;
   }
+}
+
+/* Disable hover effects on devices that don't support hover (touch devices) */
+@media (hover: none) {
+  .btn:hover { color: var(--muted); text-decoration: none; }
 }

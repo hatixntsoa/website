@@ -118,10 +118,36 @@
   requestAnimationFrame(frame);
 
   const focusShadow = cssColorWithAlpha(accentColor, 0.12);
-  const blurShadow = cssColorWithAlpha(textColor, 0.45);
+
+  // Detect whether the last user interaction was from keyboard so we can show focus styles
+  // for keyboard users but not for mouse click (which often causes lingering focus on return).
+  let lastInteractionWasKeyboard = false;
+  window.addEventListener('keydown', () => { lastInteractionWasKeyboard = true; }, true);
+  window.addEventListener('pointerdown', () => { lastInteractionWasKeyboard = false; }, true);
+
   document.querySelectorAll('.btn').forEach(btn => {
-    btn.addEventListener('focus', () => btn.style.boxShadow = `0 0 0 4px ${focusShadow}`);
-    btn.addEventListener('blur', () => btn.style.boxShadow = `0 6px 18px ${blurShadow}`);
+    btn.addEventListener('focus', () => {
+      // Apply focus style only for keyboard focus or when :focus-visible is supported
+      if (btn.matches(':focus-visible') || lastInteractionWasKeyboard) {
+        btn.style.boxShadow = `0 0 0 4px ${focusShadow}`;
+      }
+    });
+    btn.addEventListener('blur', () => btn.style.boxShadow = 'none');
+    // Also remove any focus style and blur on pointerdown to avoid leaving a focused state
+    btn.addEventListener('pointerdown', () => { btn.style.boxShadow = 'none'; btn.blur(); });
+    // ensure mobile taps also clear any focus/box-shadow
+    btn.addEventListener('touchstart', () => { btn.style.boxShadow = 'none'; btn.blur(); }, {passive: true});
+    btn.addEventListener('click', () => { btn.style.boxShadow = 'none'; btn.blur(); });
+  });
+
+  // When returning to the page, clear any lingering focus/inline styles that some mobile browsers keep.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      try {
+        if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+        document.querySelectorAll('.btn').forEach(b => { b.style.boxShadow = 'none'; });
+      } catch (e) { /* ignore */ }
+    }
   });
 
 })();

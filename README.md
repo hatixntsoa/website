@@ -4,15 +4,7 @@ My personal website. Plain HTML, CSS and vanilla JavaScript. No framework, no bu
 
 ## 👀 About this site
 
-I am a polymath and highly curious person, and this site is a small reflection of that. It is minimal on the surface, with a monospace look, a light and dark theme, and a quiet particle background. If you look closer, there are a few things hidden in it.
-
-## 🥚The easter egg
-
-Watch the big name at the top for a few seconds. It scrambles into strings of random-looking text before settling back into my name.
-
-It looks random, but it is not. Each scramble is the name run through a different algorithm: some encodings, some ciphers, some hashes. They are real, they are cycled one after another, and they are all computed in the browser with no libraries.
-
-If you are curious like me, open [animated-name.js](https://github.com/hatixntsoa/website/blob/master/scripts/animated-name.js) and see how many you can recognize. Adding your own is just one more line in the list.
+I am a polymath and highly curious person, and this site is a small reflection of that. It is minimal on the surface, with a monospace look, a light and dark theme, and a quiet particle background.
 
 ## 🧐 The story behind the background
 

@@ -5,7 +5,12 @@
   const ctx = canvas.getContext('2d');
   const rootStyles = getComputedStyle(document.documentElement);
   const accentColor = rootStyles.getPropertyValue('--accent').trim();
-  const textColor = rootStyles.getPropertyValue('--text').trim();
+    let textColor = rootStyles.getPropertyValue('--text').trim();
+
+  // Re-read the color whenever the theme (data-theme on <html>) changes
+  new MutationObserver(() => {
+    textColor = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   let cw, ch, stars;
   let pointerX = 0;
@@ -151,3 +156,113 @@
   });
 
 })();
+
+// Blog tabs and posts functionality
+(function () {
+  const homeView = document.getElementById('home-view');
+  const blogView = document.getElementById('blog-view');
+  const blogGrid = document.getElementById('blog-grid');
+  const topicLinks = document.querySelectorAll('.topic-link');
+  const backLink = document.getElementById('back-home');
+
+  // Sample blog posts - replace with your actual content
+  const blogPosts = [
+    {
+      title: 'Getting Started with CTF Challenges',
+      excerpt: 'A beginner\'s guide to Capture The Flag competitions and how to get started in cybersecurity.',
+      tag: 'ctf',
+      tagLabel: 'CTF',
+      date: 'Apr 10, 2026',
+      readTime: '5 min read'
+    },
+    {
+      title: 'Understanding AI Model Architectures',
+      excerpt: 'Deep dive into how modern AI models are structured and trained for various tasks.',
+      tag: 'ai',
+      tagLabel: 'AI',
+      date: 'Apr 5, 2026',
+      readTime: '8 min read'
+    },
+    {
+      title: 'Building Secure APIs',
+      excerpt: 'Best practices for designing and implementing secure REST APIs in modern applications.',
+      tag: 'security',
+      tagLabel: 'Security',
+      date: 'Mar 28, 2026',
+      readTime: '6 min read'
+    },
+    {
+      title: 'My Journey into Problem Solving',
+      excerpt: 'How I developed my approach to tackling complex programming challenges.',
+      tag: 'blogs',
+      tagLabel: 'Blog',
+      date: 'Mar 20, 2026',
+      readTime: '4 min read'
+    },
+    {
+      title: 'Web Application Pentesting Basics',
+      excerpt: 'Common vulnerabilities in web apps and how to identify them during security audits.',
+      tag: 'security',
+      tagLabel: 'Security',
+      date: 'Mar 15, 2026',
+      readTime: '7 min read'
+    },
+    {
+      title: 'Automating Tasks with Python',
+      excerpt: 'Practical examples of using Python scripts to automate repetitive development workflows.',
+      tag: 'dev',
+      tagLabel: 'Dev',
+      date: 'Mar 8, 2026',
+      readTime: '5 min read'
+    }
+  ];
+
+  function renderPosts(filter = 'all') {
+    const filtered = filter === 'all'
+      ? blogPosts
+      : blogPosts.filter(post => post.tag === filter);
+
+    if (filtered.length === 0) {
+      blogGrid.innerHTML = '<div class="blog-empty">No posts yet for this category. Check back soon!</div>';
+      return;
+    }
+
+    blogGrid.innerHTML = filtered.map(post => `
+      <article class="blog-card" data-tag="${post.tag}">
+        <div class="blog-card-header">
+          <span class="blog-tag">${post.tagLabel}</span>
+          <span class="blog-date">${post.date}</span>
+        </div>
+        <h3>${post.title}</h3>
+        <p>${post.excerpt}</p>
+        <div class="blog-card-footer">${post.readTime}</div>
+      </article>
+    `).join('');
+  }
+
+  function showBlog(tab) {
+    homeView.style.display = 'none';
+    blogView.style.display = '';
+    renderPosts(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showHome() {
+    blogView.style.display = 'none';
+    homeView.style.display = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  topicLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      showBlog(link.dataset.tab);
+    });
+  });
+
+  if (backLink) {
+    backLink.addEventListener('click', () => {
+      showHome();
+    });
+  }
+})();
+

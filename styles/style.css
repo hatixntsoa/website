@@ -264,11 +264,13 @@ a:hover {
 }
 
 .profile-panel {
-  /* margin-bottom: 32px; */
-  margin-bottom: clamp(12px, 3vh, 32px);
   padding: 32px;
+  padding: 16px 14px 48px;
+  width: fit-content;   /* shrink the box to its content */
+  max-width: 100%;
+  margin-inline: auto;  /* center horizontally */
+  margin-block: auto;   /* center vertically between header and footer */
 }
-
 /* ---------- Animated name ---------- */
 .electric-name {
   color: inherit;
@@ -300,7 +302,7 @@ a:hover {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
-  margin-top: auto;
+  margin-top: 0;
   /* padding: 56px 0 24px; */
   padding: clamp(12px, 3vh, 56px) 0 16px;
   color: var(--muted);
@@ -343,7 +345,8 @@ a:hover {
   }
 
   .profile-panel {
-    padding: 16px 14px;
+    /* padding: 16px 14px; */
+    padding: 16px 14px 50px;
     margin-block: auto;
   }
 
